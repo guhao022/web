@@ -29,7 +29,6 @@ func main() {
 
 	http.Handle("/", r)
 
-
 	fmt.Println("监听端口 :9900...")
 	err := http.ListenAndServe(":9900", nil)
 	if err != nil {
@@ -46,5 +45,10 @@ func H(ctx *ctx.Context) {
 
     c.Json(name)
 }
+```
+
+每个方法返回的都是 *mux.Route, 所以可以继续使用 gorilla/mux 提供的方法
+``` go
+r.Get("/a", H).Schemes("https")
 ```
 
