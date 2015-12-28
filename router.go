@@ -22,7 +22,7 @@ func (r *Router) AddFunc(path string, method string, f func(*ctx.Context)) *mux.
 	}).Methods(method)
 }
 
-func (r *Router) Prefix(prefix string, route ...mux.Route) {
+func (r *Router) Prefix(prefix string, route ...*mux.Route) {
 	for _, mr := range route {
 		mr.PathPrefix(prefix)
 	}
