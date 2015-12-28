@@ -16,8 +16,8 @@ func New() *Router {
 
 func (r *Router) AddFunc(path string, method string, f func(*Context)) *mux.Route {
 	return r.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
-		context := Context{w, r}
-		f(&context)
+		context := &Context{w, r}
+		f(context)
 	}).Methods(method)
 }
 
