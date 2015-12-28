@@ -12,7 +12,7 @@ type Router struct {
 }
 
 func New() *Router {
-	r := Router{mux.NewRouter()}
+	r := Router{mux.NewRouter(),""}
 	return &r
 }
 
