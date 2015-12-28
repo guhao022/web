@@ -25,6 +25,7 @@ func main() {
 
 	// 不使用
 	//r.Get("/a", H)
+	// ...
 
 	http.Handle("/", r)
 
