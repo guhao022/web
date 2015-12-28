@@ -13,7 +13,7 @@ import (
 type Context struct {
 	Response http.ResponseWriter
 	Request  *http.Request
-	mu sync.RWMutex
+	mu *sync.RWMutex
 }
 
 
