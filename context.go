@@ -13,27 +13,20 @@ import (
 type Context struct {
 	Response http.ResponseWriter
 	Request  *http.Request
-	mu *sync.RWMutex
 }
 
 
 //==========================INTPUT--START=========================
 
 func (ctx *Context) Uri() string {
-	ctx.mu.RLock()
-	defer ctx.mu.RUnlock()
 	return ctx.Request.RequestURI
 }
 
 func (ctx *Context) Url() string {
-	ctx.mu.RLock()
-	defer ctx.mu.RUnlock()
 	return ctx.Request.URL.Path
 }
 
 func (ctx *Context) Scheme() string {
-	ctx.mu.RLock()
-	defer ctx.mu.RUnlock()
 	if ctx.Request.URL.Scheme != "" {
 		return ctx.Request.URL.Scheme
 	}
@@ -44,20 +37,14 @@ func (ctx *Context) Scheme() string {
 }
 
 func (ctx *Context) Method() string {
-	ctx.mu.RLock()
-	defer ctx.mu.RUnlock()
 	return ctx.Request.Method
 }
 
 func (ctx *Context) IsAjax() bool {
-	ctx.mu.RLock()
-	defer ctx.mu.RUnlock()
 	return ctx.Header("X-Requested-With") == "XMLHttpRequest"
 }
 
 func (ctx *Context) IP() string {
-	ctx.mu.RLock()
-	defer ctx.mu.RUnlock()
 	ips := ctx.Proxy()
 	if len(ips) > 0 && ips[0] != "" {
 		rip := strings.Split(ips[0], ":")
@@ -73,8 +60,6 @@ func (ctx *Context) IP() string {
 }
 
 func (ctx *Context) Proxy() []string {
-	ctx.mu.RLock()
-	defer ctx.mu.RUnlock()
 	if ips := ctx.Header("X-Forwarded-For"); ips != "" {
 		return strings.Split(ips, ",")
 	}
@@ -82,8 +67,6 @@ func (ctx *Context) Proxy() []string {
 }
 
 func (ctx *Context) Port() int {
-	ctx.mu.RLock()
-	defer ctx.mu.RUnlock()
 	parts := strings.Split(ctx.Request.Host, ":")
 	if len(parts) == 2 {
 		port, _ := strconv.Atoi(parts[1])
@@ -97,20 +80,14 @@ func (ctx *Context) UserAgent() string {
 }
 
 func (ctx *Context) Header(key string) string {
-	ctx.mu.RLock()
-	defer ctx.mu.RUnlock()
 	return ctx.Request.Header.Get(key)
 }
 
 func (ctx *Context) GetStrings(key string) []string {
-	ctx.mu.RLock()
-	defer ctx.mu.RUnlock()
 	return ctx.Request.Form[key]
 }
 
 func (ctx *Context) GetString(key string, def ...string) string {
-	ctx.mu.RLock()
-	defer ctx.mu.RUnlock()
 	var defv string
 	if len(def) > 0 {
 		defv = def[0]
@@ -208,8 +185,6 @@ func (ctx *Context) GetFloat(key string, def ...float64) (float64, error) {
 //=============================INTPUT--END=========================
 
 func (ctx *Context) Cookie(key string, value ...string) string {
-	ctx.mu.Lock()
-	defer ctx.mu.Unlock()
 	if len(value) < 1 {
 		c, e := ctx.Request.Cookie(key)
 		if e != nil {
@@ -237,21 +212,15 @@ func (ctx *Context) Cookie(key string, value ...string) string {
 //============================OUTPUT--START============================
 
 func (ctx *Context) Redirect(status int, localurl string) {
-	ctx.mu.Lock()
-	defer ctx.mu.Unlock()
 	ctx.Response.Header().Set("Location", localurl)
 	ctx.Response.WriteHeader(status)
 }
 
 func (ctx *Context) SetHeader(key, val string) {
-	ctx.mu.Lock()
-	defer ctx.mu.Unlock()
 	ctx.Response.Header().Set(key, val)
 }
 
 func (ctx *Context) Abort(status int, body string) {
-	ctx.mu.Lock()
-	defer ctx.mu.Unlock()
 	ctx.Response.WriteHeader(status)
 	ctx.WriteString(body)
 	return
@@ -259,14 +228,10 @@ func (ctx *Context) Abort(status int, body string) {
 }
 
 func (ctx *Context) WriteString(content string) {
-	ctx.mu.Lock()
-	defer ctx.mu.Unlock()
 	ctx.Response.Write([]byte(content))
 }
 
 func (ctx *Context) Json(i interface{}) {
-	ctx.mu.Lock()
-	defer ctx.mu.Unlock()
 	out, err := json.Marshal(i)
 	if err != nil {
 		return
@@ -276,8 +241,6 @@ func (ctx *Context) Json(i interface{}) {
 }
 
 func (ctx *Context) Download(file string, filename ...string) {
-	ctx.mu.Lock()
-	defer ctx.mu.Unlock()
 	ctx.SetHeader("Content-Description", "File Transfer")
 	ctx.SetHeader("Content-Type", "application/octet-stream")
 	if len(filename) > 0 && filename[0] != "" {
