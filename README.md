@@ -18,13 +18,13 @@ func main() {
 	r := mux.New()
 
     // 使用group
-	g := r.Group("/g")
+	g := r.Group("/g")      // localhost:9900/g/a
 	g.Get("/a", H)
-	g.Post("/p", H)
+	g.Post("/p", H)         // localhost:9900/g/p
 	// ...
 
 	// 不使用
-	//r.Get("/a", H)
+	//r.Get("/a", H)    // localhost:9900/a
 	// ...
 
 	http.Handle("/", r)
