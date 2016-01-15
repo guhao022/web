@@ -9,14 +9,23 @@ type Router struct {
 	*mux.Router
 }
 
+var trac bool
+
 func New() *Router {
 	r := Router{mux.NewRouter()}
 	return &r
 }
 
+func (r *Router) SetTrac(b bool) {
+	trac = b
+}
+
 func (r *Router) AddFunc(path string, method string, f func(*Context)) *mux.Route {
 	return r.HandleFunc(path, func(w http.ResponseWriter, req *http.Request) {
 		context := &Context{w, req}
+		if trac {
+			context.Track()
+		}
 		f(context)
 	}).Methods(method)
 }

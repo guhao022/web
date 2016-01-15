@@ -14,6 +14,18 @@ type Context struct {
 	Request  *http.Request
 }
 
+func (ctx *Context) Track() {
+	uri := ctx.Uri()
+	method := ctx.Method()
+	ip := ctx.IP()
+
+	CLog("[TRAC] 访问：[ %s ] \n", ip)
+	CLog("[TRAC] 方法：[ %s ] \n", method)
+	CLog("[TRAC] 地址：[ %s ] \n", uri)
+
+	println("")
+}
+
 
 //==========================INTPUT--START=========================
 
@@ -80,6 +92,10 @@ func (ctx *Context) UserAgent() string {
 
 func (ctx *Context) Header(key string) string {
 	return ctx.Request.Header.Get(key)
+}
+
+func (ctx *Context) Param() string {
+	return ctx.Request.Form.Encode()
 }
 
 func (ctx *Context) GetStrings(key string) []string {
