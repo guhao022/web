@@ -14,18 +14,6 @@ type Context struct {
 	Request  *http.Request
 }
 
-func (ctx *Context) Track() {
-	uri := ctx.Uri()
-	method := ctx.Method()
-	ip := ctx.IP()
-
-	CLog("[TRAC] 访问：[ %s ] \n", ip)
-	CLog("[TRAC] 方法：[ %s ] \n", method)
-	CLog("[TRAC] 地址：[ %s ] \n", uri)
-
-	println("")
-}
-
 
 //==========================INTPUT--START=========================
 

@@ -3,6 +3,7 @@ package web
 import (
 	"github.com/gorilla/mux"
 	"net/http"
+	"time"
 )
 
 type Router struct {
@@ -16,16 +17,9 @@ func New() *Router {
 	return &r
 }
 
-func (r *Router) SetTrac(b bool) {
-	trac = b
-}
-
 func (r *Router) AddFunc(path string, method string, f func(*Context)) *mux.Route {
 	return r.HandleFunc(path, func(w http.ResponseWriter, req *http.Request) {
 		context := &Context{w, req}
-		if trac {
-			context.Track()
-		}
 		f(context)
 	}).Methods(method)
 }
@@ -49,6 +43,56 @@ func (r *Router) Delete(path string, f func(*Context)) *mux.Route {
 
 func (r *Router) Put(path string, f func(*Context)) *mux.Route {
 	return r.AddFunc(path, "PUT", f)
+}
+
+
+
+
+type Route struct {
+	Name        string
+	Method      string
+	Pattern     string
+	HandlerFunc http.HandlerFunc
+}
+
+type Routes []Route
+
+func Register(routes Routes, f func(*Context)) *mux.Route {
+
+	router := mux.NewRouter().StrictSlash(true)
+	for _, route := range routes {
+		var handler http.Handler
+		var ctx *Context
+		handler = route.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+			ctx = &Context{w, req}
+		})
+
+		handler = trac(handler, route.Name)
+
+		router.
+		Methods(route.Method).
+		Path(route.Pattern).
+		Name(route.Name).
+		Handler(handler)
+	}
+
+	return router
+}
+
+func trac(inner http.Handler, name string) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		start := time.Now()
+
+		inner.ServeHTTP(w, r)
+
+		CLog(
+			"%s\t%s\t%s\t%s\n",
+			r.Method,
+			r.RequestURI,
+			name,
+			time.Since(start),
+		)
+	})
 }
 
 
