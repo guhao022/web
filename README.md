@@ -8,14 +8,13 @@
 package main
 
 import (
-    ctx "github.com/num5/context"
-	"github.com/num5/mux"
+	"github.com/num5/web"
 	"net/http"
 	"fmt"
 )
 
 func main() {
-	r := mux.New()
+	r := web.New()
 
     // 使用group
 	g := r.Group("/g")      // localhost:9900/g/a
@@ -36,7 +35,7 @@ func main() {
 	}
 }
 
-func H(ctx *ctx.Context) {
+func H(ctx *web.Context) {
     name := ctx.GetString("name")
     if name == "" {
     	ctx.Json("miss query param: name")
