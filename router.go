@@ -1,7 +1,6 @@
 package mux
 
 import (
-	ctx "github.com/num5/context"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -15,10 +14,10 @@ func New() *Router {
 	return &r
 }
 
-func (r *Router) AddFunc(path string, method string, f func(*ctx.Context)) *mux.Route {
+func (r *Router) AddFunc(path string, method string, f func(*Context)) *mux.Route {
 	return r.HandleFunc(path, func(w http.ResponseWriter, req *http.Request) {
-		context := ctx.Context{w, req}
-		f(&context)
+		context := &Context{w, req}
+		f(context)
 	}).Methods(method)
 }
 
@@ -27,19 +26,19 @@ func (r *Router) Group(prefix string) *Router {
 	return &Router{s}
 }
 
-func (r *Router) Get(path string, f func(*ctx.Context)) *mux.Route {
+func (r *Router) Get(path string, f func(*Context)) *mux.Route {
 	return r.AddFunc(path, "GET", f)
 }
 
-func (r *Router) Post(path string, f func(*ctx.Context)) *mux.Route {
+func (r *Router) Post(path string, f func(*Context)) *mux.Route {
 	return r.AddFunc(path, "POST", f)
 }
 
-func (r *Router) Delete(path string, f func(*ctx.Context)) *mux.Route {
+func (r *Router) Delete(path string, f func(*Context)) *mux.Route {
 	return r.AddFunc(path, "DELETE", f)
 }
 
-func (r *Router) Put(path string, f func(*ctx.Context)) *mux.Route {
+func (r *Router) Put(path string, f func(*Context)) *mux.Route {
 	return r.AddFunc(path, "PUT", f)
 }
 
