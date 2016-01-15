@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+/*
+// @version 1
 type Router struct {
 	*mux.Router
 }
@@ -43,27 +45,39 @@ func (r *Router) Delete(path string, f func(*Context)) *mux.Route {
 
 func (r *Router) Put(path string, f func(*Context)) *mux.Route {
 	return r.AddFunc(path, "PUT", f)
+}*/
+
+
+/**
+ * @version 2
+ */
+
+type Router struct {
+	*mux.Router
 }
 
-
-
+func New() *Router {
+	r := Router{mux.NewRouter()}
+	return &r
+}
 
 type Route struct {
 	Name        string
 	Method      string
 	Pattern     string
-	HandlerFunc http.HandlerFunc
+	Func 		func(*Context)
+	handlerFunc http.HandlerFunc
 }
 
 type Routes []Route
 
-func Register(routes Routes, f func(*Context)) *mux.Route {
+func (r *Router) Register(routes Routes) *mux.Route {
 
 	router := mux.NewRouter().StrictSlash(true)
 	for _, route := range routes {
 		var handler http.Handler
 		var ctx *Context
-		handler = route.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		handler = route.handlerFunc(func(w http.ResponseWriter, req *http.Request) {
 			ctx = &Context{w, req}
 		})
 
