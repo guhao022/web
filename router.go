@@ -21,12 +21,9 @@ func (r *Router) AddFunc(path string, method string, f func(*Context)) *mux.Rout
 	}).Methods(method)
 }
 
-func (r *Router) Group(prefix string, routes ...*mux.Route) {
-	if len(routes) > 0 {
-		for _, mr := range routes {
-			mr.PathPrefix(prefix).Subrouter()
-		}
-	}
+func (r *Router) Group(prefix string) *Router {
+	s := r.PathPrefix(prefix).Subrouter()
+	return &Router{s}
 }
 
 func (r *Router) Get(path string, f func(*Context)) *mux.Route {
