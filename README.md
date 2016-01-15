@@ -17,10 +17,11 @@ func main() {
 	r := web.New()
 
     // 使用group
-	g := r.Group("/g")      // localhost:9900/g/a
-	g.Get("/a", H)
-	g.Post("/p", H)         // localhost:9900/g/p
-	// ...
+	r.Group("/g",
+	    r.Get("/a", H)          // localhost:9900/g/a
+        r.Post("/p", H)         // localhost:9900/g/p
+        // ...
+	)
 
 	// 不使用
 	//r.Get("/a", H)    // localhost:9900/a
