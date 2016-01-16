@@ -67,7 +67,7 @@ func SetTrac(b bool) {
 
 func Register(routes []*Route) *mux.Router {
 
-	router := mux.NewRouter().StrictSlash(true)
+	router := mux.NewRouter()
 
 	for _, route := range routes {
 
