@@ -70,12 +70,12 @@ func Register(routes []*Route) *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 
 	for _, route := range routes {
-		var ctx *Context
+
 		router.
 		Methods(route.Method).
 		Name(route.Name).
 		HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-			ctx = &Context{w, req}
+			ctx := &Context{w, req}
 			route.HandleFunc(ctx)
 			if track {
 				Logger(ctx, route.Name)
