@@ -92,7 +92,7 @@ func Logger(ctx *Context, name string) {
 		start := time.Now()
 
 		CLog(
-			"%s\t%s\t%s\t%s\n",
+			"< %s >\t# %s #\t< %s >\t[ %s ]\n",
 			ctx.Method(),
 			ctx.Uri(),
 			name,
