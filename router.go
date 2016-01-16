@@ -63,7 +63,7 @@ type Routes []Route
 
 var track bool
 
-func Register(routes Routes) *mux.Route {
+func Register(routes Routes) *mux.Router {
 
 	router := mux.NewRouter().StrictSlash(true)
 	for _, route := range routes {
