@@ -77,11 +77,11 @@ func Register(routes []*Route) *mux.Router {
 		HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 			ctx = &Context{w, req}
 			route.HandleFunc(ctx)
+			if track {
+				Logger(ctx, route.Name)
+			}
 		})
 
-		if track {
-			Logger(ctx, route.Name)
-		}
 
 	}
 
