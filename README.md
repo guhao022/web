@@ -30,7 +30,7 @@ func main() {
     	//...
     }
 
-    r := web.Register()
+    r := web.Register(routes)
 }
 
 func H(ctx *web.Context) {
