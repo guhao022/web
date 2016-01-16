@@ -63,9 +63,16 @@ type Routes []Route
 
 var track bool
 
-func Register(routes Routes) *mux.Router {
+func SetTrac(b bool) {
+	track = b
+}
+
+func Register(routes Routes, prefix ...string) *mux.Router {
 
 	router := mux.NewRouter().StrictSlash(true)
+	if len(prefix) > 0 {
+		router = router.PathPrefix(prefix[0]).Subrouter()
+	}
 	for _, route := range routes {
 		var ctx *Context
 		router.
@@ -90,7 +97,7 @@ func Logger(ctx *Context, name string) {
 
 		CLog(
 			"%s\t%s\t%s\t%s\n",
-			ctx.Method,
+			ctx.Method(),
 			ctx.Uri(),
 			name,
 			time.Since(start),
