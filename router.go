@@ -59,15 +59,13 @@ type Route struct {
 	HandleFunc 	func(*Context)
 }
 
-type Routes []Route
-
 var track bool
 
 func SetTrac(b bool) {
 	track = b
 }
 
-func Register(routes Routes) *mux.Router {
+func Register(routes []*Route) *mux.Router {
 
 	router := mux.NewRouter().StrictSlash(true)
 
