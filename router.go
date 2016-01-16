@@ -82,22 +82,19 @@ func Register(routes []*Route) *mux.Router {
 			}
 		})
 
-
 	}
 
 	return router
 }
 
 func Logger(ctx *Context, name string) {
-		start := time.Now()
+	start := time.Now()
 
-		CLog(
-			"[INFO] < %s > \t ( %s ) \t < %s > \t [ %s ] \n",
-			ctx.Method(),
-			ctx.Uri(),
-			name,
-			time.Since(start),
-		)
+	CLog("[TRAC] ================[ %s ]=================\n", ctx.IP())
+	CLog("[TRAC] $ 方法 $: < %s >\n", ctx.Method())
+	CLog("[TRAC] $ 地址 $: < %s >\n", ctx.Uri())
+	CLog("[TRAC] $ 用时 $: [ %s ]\n", time.Since(start))
+	println("")
 }
 
 
