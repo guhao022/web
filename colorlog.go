@@ -58,11 +58,11 @@ func colorLogS(format string, a ...interface{}) string {
 		log = strings.Replace(log, " >", EndColor+"", -1)
 
 		// Highlights.
-		log = strings.Replace(log, "# ", fmt.Sprintf("\033[%dm", Blue), -1)
+		log = strings.Replace(log, "# ", fmt.Sprintf("\033[%dm", Magenta), -1)
 		log = strings.Replace(log, " #", EndColor+"", -1)
 
-		log = strings.Replace(log, "$ ", fmt.Sprintf("\033[%dm", Green), -1)
-		log = strings.Replace(log, " $", EndColor+"", -1)
+		log = strings.Replace(log, "@@ ", fmt.Sprintf("\033[%dm", Green), -1)
+		log = strings.Replace(log, " @@", EndColor+"", -1)
 
 		log = clog + log
 
@@ -86,6 +86,9 @@ func colorLogS(format string, a ...interface{}) string {
 		// Highlights.
 		log = strings.Replace(log, "# ", "", -1)
 		log = strings.Replace(log, " #", "", -1)
+
+		log = strings.Replace(log, "@@ ", "", -1)
+		log = strings.Replace(log, " @@", "", -1)
 
 		log = clog + log
 	}

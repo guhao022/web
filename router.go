@@ -6,16 +6,19 @@ import (
 	"time"
 )
 
-/*
 // @version 1
 type Router struct {
 	*mux.Router
 }
 
-var trac bool
+var track bool
+
+func SetTrac(b bool) {
+	track = b
+}
 
 func New() *Router {
-	r := Router{mux.NewRouter()}
+	r := Router{mux.NewRouter().StrictSlash(true)}
 	return &r
 }
 
@@ -23,6 +26,9 @@ func (r *Router) AddFunc(path string, method string, f func(*Context)) *mux.Rout
 	return r.HandleFunc(path, func(w http.ResponseWriter, req *http.Request) {
 		context := &Context{w, req}
 		f(context)
+		if track {
+			Logger(context)
+		}
 	}).Methods(method)
 }
 
@@ -45,14 +51,14 @@ func (r *Router) Delete(path string, f func(*Context)) *mux.Route {
 
 func (r *Router) Put(path string, f func(*Context)) *mux.Route {
 	return r.AddFunc(path, "PUT", f)
-}*/
+}
 
 
 /**
  * @version 2
  */
 
-type Route struct {
+/*type Route struct {
 	Name        string
 	Method      string
 	Pattern     string
@@ -67,7 +73,7 @@ func SetTrac(b bool) {
 
 func Register(routes []*Route) *mux.Router {
 
-	router := mux.NewRouter()
+	router := mux.NewRouter().StrictSlash(true)
 
 	for _, route := range routes {
 
@@ -85,15 +91,15 @@ func Register(routes []*Route) *mux.Router {
 	}
 
 	return router
-}
+}*/
 
-func Logger(ctx *Context, name string) {
+func Logger(ctx *Context	) {
 	start := time.Now()
 
-	CLog("[TRAC] ================[ %s ]=================\n", ctx.IP())
-	CLog("[TRAC] $ 方法 $: < %s >\n", ctx.Method())
-	CLog("[TRAC] $ 地址 $: < %s >\n", ctx.Uri())
-	CLog("[TRAC] $ 用时 $: [ %s ]\n", time.Since(start))
+	CLog("[SUCC] ========@@ $ @@[ %s ]@@ $ @@========\n", ctx.IP())
+	CLog("[TRAC] @@ 方法 @@: # %s #\n", ctx.Method())
+	CLog("[TRAC] @@ 地址 @@: # %s #\n", ctx.Uri())
+	CLog("[TRAC] @@ 用时 @@: ( %s )\n", time.Since(start))
 	println("")
 }
 
