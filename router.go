@@ -67,12 +67,10 @@ func SetTrac(b bool) {
 	track = b
 }
 
-func Register(routes Routes, prefix ...string) *mux.Router {
+func Register(routes Routes) *mux.Router {
 
 	router := mux.NewRouter().StrictSlash(true)
-	if len(prefix) > 0 {
-		router = router.PathPrefix(prefix[0]).Subrouter()
-	}
+
 	for _, route := range routes {
 		var ctx *Context
 		router.
