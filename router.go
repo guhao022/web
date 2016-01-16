@@ -52,61 +52,49 @@ func (r *Router) Put(path string, f func(*Context)) *mux.Route {
  * @version 2
  */
 
-type Router struct {
-	*mux.Router
-}
-
-func New() *Router {
-	r := Router{mux.NewRouter()}
-	return &r
-}
-
 type Route struct {
 	Name        string
 	Method      string
 	Pattern     string
-	Func 		func(*Context)
-	handlerFunc http.HandlerFunc
+	HandleFunc 	func(*Context)
 }
 
 type Routes []Route
 
-func (r *Router) Register(routes Routes) *mux.Route {
+var track bool
+
+func Register(routes Routes) *mux.Route {
 
 	router := mux.NewRouter().StrictSlash(true)
 	for _, route := range routes {
-		var handler http.Handler
 		var ctx *Context
-		handler = route.handlerFunc(func(w http.ResponseWriter, req *http.Request) {
-			ctx = &Context{w, req}
-		})
-
-		handler = trac(handler, route.Name)
-
 		router.
 		Methods(route.Method).
-		Path(route.Pattern).
 		Name(route.Name).
-		Handler(handler)
+		HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+			ctx = &Context{w, req}
+			route.HandleFunc(ctx)
+		})
+
+		if track {
+			Logger(ctx, route.Name)
+		}
+
 	}
 
 	return router
 }
 
-func trac(inner http.Handler, name string) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+func Logger(ctx *Context, name string) {
 		start := time.Now()
-
-		inner.ServeHTTP(w, r)
 
 		CLog(
 			"%s\t%s\t%s\t%s\n",
-			r.Method,
-			r.RequestURI,
+			ctx.Method,
+			ctx.Uri(),
 			name,
 			time.Since(start),
 		)
-	})
 }
 
 
