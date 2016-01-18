@@ -5,9 +5,7 @@ import (
 	"net/http"
 )
 
-const (
-	BAD_REQUEST_ERROR = iota + 100000
-)
+
 
 type Error struct {
 	ID     string      `json:"id,omitempty"`
@@ -29,8 +27,12 @@ type ErrSource struct {
 	Parameter string `json:"parameter"`
 }
 
-func NewError(w http.ResponseWriter, err *Error) error {
+func NewErr() *Error {
+
+}
+
+/*func NewError(w http.ResponseWriter, err *Error) error {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(err.Status)
 	return json.NewEncoder(w).Encode(map[string][]*Error{"errors": []*Error{err}})
-}
+}*/
