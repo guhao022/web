@@ -3,6 +3,7 @@ import (
 	. "web"
 	"log"
 	"net/http"
+	"github.com/num5/web"
 )
 
 func Erro(w http.ResponseWriter, r *http.Request) {
@@ -34,14 +35,9 @@ func Erro(w http.ResponseWriter, r *http.Request) {
 func main() {
 	SetTrac(true)
 
-	r := Register([]*Route{
-		{
-			"ERROR",
-			"GET",
-			"/err",
-			Erro,
-		},
-	})
+	r := web.New()
+
+	r.Get("/err", Erro)
 
 	log.Printf("Server start listen on %d", 9900)
 

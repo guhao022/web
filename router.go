@@ -8,7 +8,7 @@ import (
 )
 
 // @version 1
-/*type Router struct {
+type Router struct {
 	*mux.Router
 }
 
@@ -19,42 +19,39 @@ func SetTrac(b bool) {
 }
 
 func New() *Router {
-	r := Router{mux.NewRouter().StrictSlash(true)}
-	return &r
+	return &Router{}
 }
 
-func (r *Router) AddFunc(path string, method string, f func(*Context)) *mux.Route {
-	return r.HandleFunc(path, func(w http.ResponseWriter, req *http.Request) {
-		context := &Context{w, req}
-		f(context)
-		if track {
-			Logger(context)
-		}
-	}).Methods(method)
+func (r *Router) AddFunc(path, method string, h http.HandlerFunc) *mux.Route {
+	var handler http.Handler
+	handler = h
+	if track {
+		handler = Logger(handler)
+	}
+	return r.NewRoute().PathPrefix(path).Handler(handler).Methods(method)
 }
 
-
-func (r *Router) Get(path string, f func(*Context)) *mux.Route {
-	return r.AddFunc(path, "GET", f)
+func (r *Router) Get(path string, h http.HandlerFunc) *mux.Route {
+	return r.AddFunc(path, "GET", h)
 }
 
-func (r *Router) Post(path string, f func(*Context)) *mux.Route {
-	return r.AddFunc(path, "POST", f)
+func (r *Router) Post(path string, h http.HandlerFunc) *mux.Route {
+	return r.AddFunc(path, "POST", h)
 }
 
-func (r *Router) Delete(path string, f func(*Context)) *mux.Route {
-	return r.AddFunc(path, "DELETE", f)
+func (r *Router) Delete(path string, h http.HandlerFunc) *mux.Route {
+	return r.AddFunc(path, "DELETE", h)
 }
 
-func (r *Router) Put(path string, f func(*Context)) *mux.Route {
-	return r.AddFunc(path, "PUT", f)
-}*/
+func (r *Router) Put(path string, h http.HandlerFunc) *mux.Route {
+	return r.AddFunc(path, "PUT", h)
+}
 
 /**
  * @version 2
  */
 
-type Route struct {
+/*type Route struct {
 	Name       string
 	Method     string
 	Pattern    string
@@ -85,9 +82,9 @@ func Register(routes []*Route) *mux.Router {
 	}
 
 	return router
-}
+}*/
 
-func Logger(inner http.Handler, name string) http.Handler {
+func Logger(inner http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
 
@@ -95,7 +92,6 @@ func Logger(inner http.Handler, name string) http.Handler {
 
 		CLog("[SUCC] ========@@ $ @@[ %s ]@@ $ @@========\n", IP(r))
 		CLog("[TRAC] @@ 方法 @@: # %s #\n", r.Method)
-		CLog("[TRAC] @@ 路由 @@: # %s #\n", name)
 		CLog("[TRAC] @@ 地址 @@: # %s #\n", r.RequestURI)
 		CLog("[TRAC] @@ 用时 @@: ( %s )\n", time.Since(start))
 		println("")
