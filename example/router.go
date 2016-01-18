@@ -13,7 +13,7 @@ func Erro(w http.ResponseWriter, r *http.Request) {
 			About: "http://baidu.com",
 		},
 		Status: 500,
-		Code:   0001,
+		Code:   "0001",
 		Title:  "Title must not be empty",
 		Detail: "Never occures in real life",
 		Source: &ErrSource{

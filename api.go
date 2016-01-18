@@ -1,6 +1,6 @@
 package web
 
-/*import "code.google.com/p/go-uuid/uuid"
+import "code.google.com/p/go-uuid/uuid"
 
 type Document struct {
 	Version  string 	 `json:"version"`
@@ -18,4 +18,4 @@ func NewDoc() (doc *Document) {
 	}
 
 	return
-}*/
+}

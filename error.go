@@ -5,11 +5,15 @@ import (
 	"net/http"
 )
 
+const (
+	BAD_REQUEST_ERROR = iota + 100000
+)
+
 type Error struct {
 	ID     string      `json:"id,omitempty"`
 	Links  *ErrLinks   `json:"links"`
 	Status int         `json:"_"`
-	Code   int         `json:"code"`
+	Code   string      `json:"code"`
 	Title  string      `json:"title"`
 	Detail string      `json:"detail"`
 	Source *ErrSource  `json:"source"`
