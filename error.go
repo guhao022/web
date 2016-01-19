@@ -27,12 +27,8 @@ type ErrSource struct {
 	Parameter string `json:"parameter"`
 }
 
-func NewErr() *Error {
-
-}
-
-/*func NewError(w http.ResponseWriter, err *Error) error {
+func NewError(w http.ResponseWriter, err *Error) error {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(err.Status)
 	return json.NewEncoder(w).Encode(map[string][]*Error{"errors": []*Error{err}})
-}*/
+}
