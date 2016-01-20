@@ -5,8 +5,6 @@ import (
 	"net/http"
 )
 
-
-
 type Error struct {
 	ID     string      `json:"id,omitempty"`
 	Links  *ErrLinks   `json:"links"`
