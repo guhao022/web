@@ -49,10 +49,10 @@ func Logger(h http.Handler) http.Handler {
 
 		h.ServeHTTP(w, r)
 
-		CLog("[SUCC] ========@@ $ @@[ %s ]@@ $ @@========\n", IP(r))
-		CLog("[TRAC] @@ 方法 @@: # %s #\n", r.Method)
-		CLog("[TRAC] @@ 地址 @@: # %s #\n", r.RequestURI)
-		CLog("[TRAC] @@ 用时 @@: ( %s )\n", time.Since(start))
+		CLog("[SUCC] ========@@ $ @@[ %s ]@@ $ @@========", IP(r))
+		CLog("[TRAC] @@ 方法 @@: # %s #", r.Method)
+		CLog("[TRAC] @@ 地址 @@: # %s #", r.RequestURI)
+		CLog("[TRAC] @@ 用时 @@: ( %s )", time.Since(start))
 		println("")
 	})
 }

@@ -28,7 +28,7 @@ const (
 )
 
 func CLog(format string, a ...interface{}) {
-	fmt.Print(colorLogS(format, a...))
+	fmt.Println(colorLogS(format, a...))
 }
 
 func colorLogS(format string, a ...interface{}) string {
